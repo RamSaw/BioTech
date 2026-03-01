@@ -26,6 +26,8 @@ jobs:
           # 1. Check formatting (fails if changes needed)
           pyink --check .
           nbqa pyink --check .
+          mdformat --check .
+          nbqa mdformat --check . --nbqa-md
 
           # 2. Run Pylint on Python files (fails on warnings/errors)
           # We use pylint-exit to explicitly fail on warnings (-wfail) and errors (-efail)
