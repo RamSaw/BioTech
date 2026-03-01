@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements-dev.lock
+
+      - name: Strict Pylint & Formatting Check (Zero Tolerance)
+        run: |
+          # 1. Check formatting (fails if changes needed)
+          pyink --check .
+          nbqa pyink --check .
+
+          # 2. Run Pylint on Python files (fails on warnings/errors)
+          # We use pylint-exit to explicitly fail on warnings (-wfail) and errors (-efail)
+          # -efail: fail on Error (bit 2)
+          # -wfail: fail on Warning (bit 4)
+          # -cfail: fail on Convention (bit 16)
+          # -rfail: fail on Refactor (bit 8)
+          if [ -n "$(git ls-files '*.py')" ]; then
+            pylint $(git ls-files '*.py') || pylint-exit -efail -wfail -cfail -rfail $?
+          fi
+
+          # 3. Run Pylint on Notebooks (fails on warnings/errors)
+          # nbqa returns the exit code of the tool, so we can pipe it to pylint-exit similarly
+          nbqa pylint . || pylint-exit -efail -wfail -cfail -rfail $?

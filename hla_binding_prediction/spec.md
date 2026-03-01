@@ -2,7 +2,7 @@
 **Path:** `hla_binding_prediction`
 
 ## Global Project Guidelines
-All coding within this project **MUST** strictly adhere to the guidelines outlined in [`coding_best_practices.md`](../coding_best_practices.md).
+All coding within this project **MUST** strictly adhere to the guidelines outlined in [`development_guide.md`](../development_guide.md).
 
 ## Project Structure
 The computational pipeline will be split across three distinct Jupyter Notebooks to enforce modularity and clear execution sequences:

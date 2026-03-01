@@ -1,0 +1,31 @@
+[project]
+name = "pet-biotech-projects"
+version = "0.1.0"
+description = "Pet BioTech projects"
+requires-python = ">=3.10"
+# Runtime dependencies are managed in notebooks for now
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pylint>=4.0.0,<5.0.0",
+    "pyink>=25.1.0,<26.0.0",
+    "nbqa>=1.9.0,<2.0.0",
+    "pip-tools>=7.5.0,<8.0.0",
+    "pylint-exit>=1.2.0,<2.0.0",
+]
+
+[tool.pyink]
+line-length = 100
+
+[tool.pylint.format]
+max-line-length = 100
+
+[tool.pylint.messages_control]
+disable = [
+    "C0114", # missing-module-docstring (often not needed for scripts/notebooks)
+    "C0103", # invalid-name (too strict for data science often, but we might enable later)
+    "C0413", # wrong-import-position (notebooks often have imports in middle)
+    "R0903", # too-few-public-methods (data containers/globals often have 0)
+    "R0914", # too-many-locals (notebook cells often have many variables)
+]
