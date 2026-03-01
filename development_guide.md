@@ -5,7 +5,7 @@
 - **No Conversational Meta-Commentary:** Do not include conversational meta-commentary between
   developers/AIs in the code. Keep those communications out of the code.
 - **Follow Standard Style:** Adhere to PEP 8 guidelines. Choose a standard line length constraint
-  (e.g., 80 or 100 characters) and use automated formatters and linters.
+  (e.g., 100 characters) and use automated formatters and linters.
 - **Type Annotations:** Extensively use type hints to make code self-documenting and compatible with
   static analysis. Prefer `collections.abc` types like `Mapping`, `Sequence`, `Iterable`, etc., in
   function arguments instead of concrete internal types like `dict` or `list` to make your functions
@@ -85,13 +85,13 @@
   - `mdformat .` (or `nbqa mdformat . --nbqa-md` for notebooks) to fix formatting of markdown.
   - `pylint <file>` (or `nbqa pylint <file>`) to check for errors.
 - **Strict Compliance:** In CI and final checks, use these flags to enforce zero tolerance:
-  - **Formatting:** `pyink --check .`, `mdformat . --check`, `nbqa pyink --check .`,
-    `nbqa mdformat . --nbqa-md --nbqa-diff` - fails if any file needs formatting.
-  - **Linting:** `pylint <file> || pylint-exit -efail -wfail -cfail -rfail $?` (and similarly for
-    `nbqa`). We enforce failure on Errors, Warnings, Conventions, and Refactors.
-- **Fix Violations:** You must fix **ALL** linting errors and warnings. Zero tolerance policy: if
-  `pylint` reports a warning, treat it as an error.
-- **CI Checks:** Automated CI runs these strict commands. Ensure your code passes locally first.
+  - **Formatting:**
+    - Python: `pyink --check --diff .` (or `nbqa pyink --check --diff .`) - prints diffs for required changes.
+    - Markdown: `mdformat .` followed by `git diff --exit-code` (or `nbqa mdformat . --nbqa-md --nbqa-diff` for notebooks).
+  - **Linting:**
+    - `pylint --output-format=colorized <file>` (or `nbqa pylint . --output-format=colorized`).
+    - We enforce failure on Errors, Warnings, Conventions, and Refactors.
+  - **CI Checks:** Automated CI runs these strict commands. Ensure your code passes locally first.
 
 ## 5. Dependency Management
 
