@@ -12,11 +12,27 @@ dev = [
     "pylint-exit>=1.2.0,<2.0.0",
     "pyink>=25.1.0,<26.0.0",
     "nbqa>=1.9.0,<2.0.0",
+    # markdown formatting
+    "mdformat>=1.0.0,<2.0.0",
+    "mdformat-gfm>=1.0.0,<2.0.0",
+    "mdformat-frontmatter>=2.0.10,<3.0.0",
+    "mdformat-footnote>=0.1.3,<1.0.0",
+    "mdformat-pyproject>=0.1.0,<1.0.0",
     "pip-tools>=7.5.0,<8.0.0",
+    # deps for linter
+    "pandas==3.0.1",
+    "numpy==2.4.2",
+    "scipy==1.17.1",
+    "matplotlib==3.10.8",
+    "seaborn==0.13.2",
+    "ipython==9.10.0",
 ]
 
 [tool.pyink]
 line-length = 100
+
+[tool.mdformat]
+wrap = 100
 
 [tool.pylint.format]
 max-line-length = 100
