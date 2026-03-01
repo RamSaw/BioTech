@@ -85,7 +85,8 @@
   - `mdformat .` (or `nbqa mdformat . --nbqa-md` for notebooks) to fix formatting of markdown.
   - `pylint <file>` (or `nbqa pylint <file>`) to check for errors.
 - **Strict Compliance:** In CI and final checks, use these flags to enforce zero tolerance:
-  - **Formatting:** `pyink --check .`, `mdformat . --check`, `nbqa pyink --check .`, `nbqa mdformat . --nbqa-md --nbqa-diff` - fails if any file needs formatting.
+  - **Formatting:** `pyink --check .`, `mdformat . --check`, `nbqa pyink --check .`,
+    `nbqa mdformat . --nbqa-md --nbqa-diff` - fails if any file needs formatting.
   - **Linting:** `pylint <file> || pylint-exit -efail -wfail -cfail -rfail $?` (and similarly for
     `nbqa`). We enforce failure on Errors, Warnings, Conventions, and Refactors.
 - **Fix Violations:** You must fix **ALL** linting errors and warnings. Zero tolerance policy: if
