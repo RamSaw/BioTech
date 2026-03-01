@@ -78,20 +78,13 @@
 
 ## 4. Linting & Formatting
 
-- **Mandatory Tools:** You **MUST** use `pyink` and `mdformat` for formatting and `pylint` for
-  linting.
-- **Workflow:** After every code modification (including notebooks), you **MUST** run:
-  - `pyink .` (or `nbqa pyink .` for notebooks) to fix formatting.
-  - `mdformat .` (or `nbqa mdformat . --nbqa-md` for notebooks) to fix formatting of markdown.
-  - `pylint <file>` (or `nbqa pylint <file>`) to check for errors.
-- **Strict Compliance:** In CI and final checks, use these flags to enforce zero tolerance:
-  - **Formatting:**
-    - Python: `pyink --check --diff .` (or `nbqa pyink --check --diff .`) - prints diffs for required changes.
-    - Markdown: `mdformat .` followed by `git diff --exit-code` (or `nbqa mdformat . --nbqa-md --nbqa-diff` for notebooks).
-  - **Linting:**
-    - `pylint --output-format=colorized <file>` (or `nbqa pylint . --output-format=colorized`).
-    - We enforce failure on Errors, Warnings, Conventions, and Refactors.
-  - **CI Checks:** Automated CI runs these strict commands. Ensure your code passes locally first.
+The **source of truth** for all formatting and linting commands is `.github/workflows/ci.yml`.
+
+### Agent Workflow
+1.  **Check & Fix:** After making changes, apply formatting and run linters on modified files.
+    -   Format: `pyink .` / `mdformat .` (plus `nbqa` variants)
+    -   Lint: `pylint` (plus `nbqa` variants)
+    -   *If checks fail, fix the issues immediately.*
 
 ## 5. Dependency Management
 
@@ -142,17 +135,17 @@ specified `branch_name`.
 
 When the user types `[finish]` (or similar), you **MUST** perform the following pre-push checklist:
 
-1. **Regenerate Lock File:** Always regenerate `requirements-dev.lock` to ensure it is fresh. If
-   there are no changes, it updates nothing.
+1. **Config Check:** Verify `pyproject.toml` and other config files are clean and correct.
 1. **Documentation Sync:**
    - Update all `README.md` files if content is outdated.
    - Update all `spec.md` files to match the current implementation.
    - **Reflect Feedback:** Review conversation history for any unaddressed feedback or general
      instructions and update `development_guide.md` accordingly.
-1. **Config Check:** Verify `pyproject.toml` and other config files are clean and correct.
 1. **Format:** Run `pyink .`, `nbqa pyink .`, `mdformat .` and `nbqa mdformat . --nbqa-md` (allow
    them to fix files).
-1. **Run Tests:** Execute all CI (read `ci.yml` file) checks locally (e.g., `pylint`, `nbqa`, etc.)
-   and ensure they pass.
+1. **Regenerate Lock File:** Always regenerate `requirements-dev.lock` to ensure it is fresh. If
+   there are no changes, it updates nothing.
+1. **Run Tests:** Execute all CI (read `ci.yml` file) checks (e.g., `pylint`, `nbqa`, etc.) and
+   tests locally and ensure they pass.
 1. **Create PR:** Create a Pull Request into `main` with a title and description written by you
    based on the pending changes.
