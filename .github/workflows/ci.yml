@@ -27,7 +27,7 @@ jobs:
           pyink --check .
           nbqa pyink --check .
           mdformat --check .
-          nbqa mdformat --check . --nbqa-md
+          nbqa mdformat . --nbqa-md --nbqa-diff
 
           # 2. Run Pylint on Python files (fails on warnings/errors)
           # We use pylint-exit to explicitly fail on warnings (-wfail) and errors (-efail)
