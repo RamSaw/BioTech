@@ -64,6 +64,9 @@
 - **Respect User Changes:** Do **NOT** revert or overwrite user changes unless strictly necessary for the current objective. If you must overwrite a user modification, you likely misunderstood the intent—ask for clarification first.
 
 ## 8. Protocols & Workflows
+### The `[begin: branch_name]` Command
+When the user types `[begin: branch_name]`, you **MUST** create a new branch from `main` with the specified `branch_name`.
+
 ### The `[finish]` Command
 When the user types `[finish]` (or similar), you **MUST** perform the following pre-push checklist:
 1.  **Regenerate Lock File:** Always regenerate `requirements-dev.lock` to ensure it is fresh. If there are no changes, it updates nothing.
@@ -74,4 +77,4 @@ When the user types `[finish]` (or similar), you **MUST** perform the following 
 3.  **Config Check:** Verify `pyproject.toml` and other config files are clean and correct.
 4.  **Format:** Run `pyink .` and `nbqa pyink .` (allow them to fix files).
 5.  **Run Tests:** Execute all CI (read `ci.yml` file) checks locally (e.g., `pylint`, `nbqa`, etc.) and ensure they pass.
-6.  **Final Status:** Only report "Ready to push" if all checks pass and docs are synced.
+6.  **Create PR:** Create a Pull Request into `main` with a title and description written by you based on the pending changes.
