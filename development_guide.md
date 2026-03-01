@@ -81,10 +81,11 @@
 The **source of truth** for all formatting and linting commands is `.github/workflows/ci.yml`.
 
 ### Agent Workflow
-1.  **Check & Fix:** After making changes, apply formatting and run linters on modified files.
-    -   Format: `pyink .` / `mdformat .` (plus `nbqa` variants)
-    -   Lint: `pylint` (plus `nbqa` variants)
-    -   *If checks fail, fix the issues immediately.*
+
+1. **Check & Fix:** After making changes, apply formatting and run linters on modified files.
+   - Format: `pyink .` / `mdformat .` (plus `nbqa` variants)
+   - Lint: `pylint` (plus `nbqa` variants)
+   - *If checks fail, fix the issues immediately.*
 
 ## 5. Dependency Management
 
