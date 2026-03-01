@@ -24,9 +24,9 @@ jobs:
       - name: Strict Pylint & Formatting Check (Zero Tolerance)
         run: |
           # 1. Check formatting (fails if changes needed)
-          pyink --check .
-          nbqa pyink --check .
-          mdformat --check .
+          pyink --check --diff .
+          nbqa pyink --check --diff .
+          mdformat . --check
           nbqa mdformat . --nbqa-md --nbqa-diff
 
           # 2. Run Pylint on Python files (fails on warnings/errors)
@@ -36,9 +36,9 @@ jobs:
           # -cfail: fail on Convention (bit 16)
           # -rfail: fail on Refactor (bit 8)
           if [ -n "$(git ls-files '*.py')" ]; then
-            pylint $(git ls-files '*.py') || pylint-exit -efail -wfail -cfail -rfail $?
+            pylint --output-format=colorized $(git ls-files '*.py') || pylint-exit -efail -wfail -cfail -rfail $?
           fi
 
           # 3. Run Pylint on Notebooks (fails on warnings/errors)
           # nbqa returns the exit code of the tool, so we can pipe it to pylint-exit similarly
-          nbqa pylint . || pylint-exit -efail -wfail -cfail -rfail $?
+          nbqa pylint . --output-format=colorized || pylint-exit -efail -wfail -cfail -rfail $?
