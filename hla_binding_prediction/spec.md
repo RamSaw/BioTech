@@ -22,7 +22,7 @@ modularity and clear execution sequences:
 
 ### Colab 2: Model Training
 
-- **File:** `training.ipynb` (To be created)
+- **File:** `training.ipynb`
 - **Goal:** Load the dataset from `data/processed/training_data.csv` and fine-tune the pre-trained
   ESM-2 protein language model.
 
