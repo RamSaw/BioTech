@@ -44,4 +44,5 @@ disable = [
     "C0413", # wrong-import-position (notebooks often have imports in middle)
     "R0903", # too-few-public-methods (data containers/globals often have 0)
     "R0914", # too-many-locals (notebook cells often have many variables)
+    "E0401", # import-error (notebook runtime deps like torch/transformers are installed via %pip)
 ]
