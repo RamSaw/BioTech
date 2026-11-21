@@ -1,0 +1,3 @@
+{
+  "install": "mkdir -p \"$HOME/.venvs\" && ([ -x \"$HOME/.venvs/biotech/bin/pip\" ] || python3 -m venv \"$HOME/.venvs/biotech\") && \"$HOME/.venvs/biotech/bin/pip\" install --no-input --index-url https://pypi.org/simple -r requirements-dev.lock && touch \"$HOME/.bashrc\" && (sed -i '/case \\$- in/,/esac/d' \"$HOME/.bashrc\" 2>/dev/null || true) && (grep -qxF 'export VIRTUAL_ENV=\"$HOME/.venvs/biotech\"' \"$HOME/.bashrc\" || echo 'export VIRTUAL_ENV=\"$HOME/.venvs/biotech\"' >> \"$HOME/.bashrc\") && (grep -qxF 'export PATH=\"$HOME/.venvs/biotech/bin:$PATH\"' \"$HOME/.bashrc\" || echo 'export PATH=\"$HOME/.venvs/biotech/bin:$PATH\"' >> \"$HOME/.bashrc\")"
+}
