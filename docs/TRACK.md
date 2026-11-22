@@ -217,7 +217,10 @@ epsilon buy you".
   three papers critically start to finish, because "here is a paper — is this result solid?" is a
   real interview question and a summary cannot teach the skill of answering it.
 - **Bits in Bio** Slack, and **Health AI Munich** meetups. One conversation per month with someone
-  doing this for a living beats any amount of reading.
+  doing this for a living beats any amount of reading. Status: Bits in Bio joined November 2026 —
+  joined is not the same as having spoken to anyone, and the target is a conversation, not
+  membership. Health AI Munich meets 18 December 2026 (cannot attend); next attendable date is late
+  January 2027, with a reminder set for 7 January to check the schedule and register.
 - **One open-source contribution** by end of Phase 3 — a merged PR in a real bio/ML library is a
   stronger credibility signal than another self-contained project.
 
