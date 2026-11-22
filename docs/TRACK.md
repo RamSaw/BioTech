@@ -200,10 +200,22 @@ epsilon buy you".
 
 ### Running in parallel (not a phase)
 
-- **One paper a week**, chosen to be the thing the current phase needs. Fixed template in the
-  worklog: what question, what data, what would have changed my mind, what I would do differently.
-  Phase 1's reading list is the NetMHCpan paper, an HLA-B27/ankylosing-spondylitis review, and
-  ESM-2.
+- **Fundamentals come from a textbook, not from papers.** A friend who made the same SWE →
+  bioinformatics move prepared by working through the first seven chapters of a textbook, and that
+  is the right shape: papers assume the fundamentals and spend their words on novelty, so they are a
+  bad teacher for the basics. Work through the book at a steady chapter rate, with closed-book
+  retrieval after each chapter — the retrieval is what separates this from passive reading, and it
+  is where a course or book usually leaks.
+- **Figures and methods, not whole papers.** When a paper is needed, read the figures with their
+  captions and the methods section; skip introduction and discussion, which is where the noise is
+  concentrated. Fifteen minutes on one figure often beats an hour on the prose. Phase 1 needs
+  exactly one figure: the B\*27:05 motif logo.
+- **AI-produced digests for breadth; primary sources for the load-bearing claim.** Having the AI
+  fetch and summarise background is a good use of it. The limit: if it decides what matters about
+  the one result my project rests on, it is doing the judgement I am trying to build. So digests for
+  context, and my own reading for the claim I will be asked to defend. By Phase 2–3, read two or
+  three papers critically start to finish, because "here is a paper — is this result solid?" is a
+  real interview question and a summary cannot teach the skill of answering it.
 - **Bits in Bio** Slack, and **Health AI Munich** meetups. One conversation per month with someone
   doing this for a living beats any amount of reading.
 - **One open-source contribution** by end of Phase 3 — a merged PR in a real bio/ML library is a

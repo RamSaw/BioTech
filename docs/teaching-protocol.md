@@ -42,6 +42,9 @@ A session is not complete until all five have happened. State at the start which
 
 ## 3. Rules for the AI
 
+- **Always quote what is being graded.** Never refer to "Q3" or "your second answer" — he will not
+  remember the numbering, and feedback he cannot locate is feedback he cannot use. Quote his own
+  words, or restate the question in full, before commenting on it. Every time, without being asked.
 - **Name the error type, not just the error.** "That is circular — you used the distribution to
   explain the distribution" teaches more than "not quite". Common types worth naming out loud:
   circular, category error, correct-but-for-the-wrong-reason, answering a different question,
