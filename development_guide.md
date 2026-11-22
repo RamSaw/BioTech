@@ -101,8 +101,12 @@ The **source of truth** for all formatting and linting commands is `.github/work
   - After modifying `pyproject.toml`, you **MUST** update the lock file immediately.
   - Command: `pip-compile pyproject.toml --extra dev --output-file requirements-dev.lock` (requires
     `pip-tools`).
-- **Installing Dependencies:** Use `pip install -r requirements-dev.lock` to set up the dev
-  environment.
+- **Installing Dependencies:** Install the lock file into a virtualenv, not system-wide:
+  `python3 -m venv ~/.venvs/biotech && ~/.venvs/biotech/bin/pip install -r requirements-dev.lock`. A
+  plain `pip install -r requirements-dev.lock` fails on Debian-based images with
+  `Cannot uninstall pyparsing ..., RECORD file not found`, because the system package manager owns
+  that package. Cloud sessions get this automatically via the environment setup script described in
+  [`docs/environment-setup.md`](docs/environment-setup.md).
 
 ## 6. Tips
 
