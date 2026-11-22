@@ -32,6 +32,17 @@ marked ✅ and drops out of the handwriting rotation.
 | **epitope**        | the peptide fragment that the immune system actually recognises                                 |
 | **binding groove** | the cleft in the MHC protein that the peptide sits in                                           |
 
+## Protein structure (needed to discuss binding at all)
+
+| Term                | Meaning                                                                                                      |
+| ------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **backbone**        | the repeating chain that all amino acids share; identical regardless of which amino acid it is               |
+| **side chain**      | the part that differs between the 20 amino acids — what makes Arg different from Gly. Hangs off the backbone |
+| **pocket**          | a small cavity within the binding groove. The MHC groove has several, each a particular size and shape       |
+| **buried**          | pointing inward, enclosed by surrounding protein, not touching water                                         |
+| **solvent-exposed** | pointing outward into the surrounding water                                                                  |
+| **bulky**           | a physically large side chain (e.g. tryptophan) as opposed to a small one (e.g. glycine)                     |
+
 ## Measurement
 
 | Term                         | Meaning                                                                               |

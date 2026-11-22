@@ -1,0 +1,116 @@
+# Dedicated cloud environment — setup instructions
+
+Instructions for setting this up by hand in claude.ai settings. Everything below was run and
+verified in a live session before being written down.
+
+## Does a dedicated environment fix the blocked fetches?
+
+**Yes, for ordinary web hosts.** Cloud sessions run with a network allowlist. On the Default
+environment that list is empty — only package registries and MCP servers are reachable — so fetching
+`amzn.eu`, `meetup.com` or a motif-logo page fails at DNS resolution. Adding hosts to a dedicated
+environment's allowlist fixes exactly that, and keeps the permission scoped to this project instead
+of widening every other session's network.
+
+**Probably not for the Slack plugin, and not because of the allowlist.** The Default environment
+already has "allow MCP servers" switched on, yet the Slack server was refused. The likely cause is
+that the allowance is computed when a session starts and the plugin was installed mid-session — so
+the fix is simply to start a fresh session, which costs nothing to try. If Slack still fails in a
+new session, then its host genuinely needs to be named in the allowlist, and the error message will
+say which host.
+
+## 1. Create the environment
+
+In the session title bar, open the cloud environment menu → **Edit** / **New environment**.
+
+- **Name:** `biotech`
+- **Scope:** personal
+- **Repositories:** add `RamSaw/BioTech`, so future sessions for this repo can find this environment
+- **Network access:** Limited, with **Allow package managers** left ticked
+
+## 2. Allowed domains
+
+Add these under **Allowed domains**. Exact hostnames only — wildcards are not accepted.
+
+Needed by the plan:
+
+| Host                         | Why                                                                              |
+| ---------------------------- | -------------------------------------------------------------------------------- |
+| `huggingface.co`             | Phase 3 publishes the dataset and weights here; also `from_pretrained` for ESM-2 |
+| `cdn-lfs.huggingface.co`     | the CDN that actually serves Hugging Face model and dataset files                |
+| `www.iedb.org`               | the source of the raw binding data, for refreshing or re-exporting it            |
+| `services.healthtech.dtu.dk` | DTU Health Tech — NetMHCpan and the MHC motif atlas, i.e. the Phase 1 reference  |
+| `rest.uniprot.org`           | Swiss-Prot amino-acid background frequencies, used to generate decoys            |
+| `www.ncbi.nlm.nih.gov`       | PubMed, and the free full text of *Molecular Biology of the Cell*                |
+| `pmc.ncbi.nlm.nih.gov`       | full-text papers                                                                 |
+
+Convenience, worth adding:
+
+| Host             | Why                                                                |
+| ---------------- | ------------------------------------------------------------------ |
+| `www.meetup.com` | the 7 January reminder tries to read the Health AI Munich schedule |
+| `amzn.eu`        | book lookups; this is the host that failed earlier                 |
+
+Leave out anything not on this list. A narrow allowlist is the point — if something is missing, the
+error names the host and it can be added in a few seconds.
+
+## 3. Setup script
+
+Paste this under **Setup script**. It runs as root each time a container is built fresh, after the
+repository is cloned and before Claude starts.
+
+```bash
+set -eu
+VENV="$HOME/.venvs/biotech"
+[ -x "$VENV/bin/pip" ] || python3 -m venv "$VENV"
+if [ -f BioTech/requirements-dev.lock ]; then
+  "$VENV/bin/pip" install --no-input -q -r BioTech/requirements-dev.lock
+fi
+LINE="export PATH=\"$VENV/bin:\$PATH\""
+grep -qxF "$LINE" "$HOME/.bashrc" 2>/dev/null || echo "$LINE" >> "$HOME/.bashrc"
+```
+
+What it does and why it is shaped this way:
+
+- Installs the dev lock file, so `pyink`, `mdformat`, `nbqa` and `pylint` are present and the CI
+  checks can be run locally without installing anything first. Verified: all four install and the
+  full check suite passes.
+- **Uses a virtualenv rather than installing system-wide.** A plain
+  `pip install -r requirements-dev.lock` *fails* on this base image —
+  `Cannot uninstall pyparsing 3.1.1, RECORD file not found`, because Debian owns that package. The
+  venv sidesteps it. This was confirmed by trying both.
+- Guards on `BioTech/` existing, so the script cannot fail a session that has a different repository
+  attached. A failing setup script stops the session from starting at all.
+- Idempotent: running it twice is clean and the `.bashrc` line is added once. Verified.
+
+Note: `.agents/environment.json` in this repo already describes a near-identical install, but it
+does **not** appear to be taking effect — `mdformat` and friends were absent from a fresh session
+and `~/.venvs/biotech` did not exist, so each session had to install them by hand. Once the setup
+script above is in place, consider deleting `.agents/environment.json` rather than maintaining two
+mechanisms that claim to do the same thing.
+
+## 4. Validation prompt
+
+Start a new session on the `biotech` environment with this repository selected, and paste this:
+
+```text
+Validate this environment before we start work. Report each check as pass or fail with the
+actual evidence, and do not fix anything yet — I want to see what is broken first.
+
+1. Confirm CLAUDE.md loaded: without re-reading it, tell me what the session-start checklist
+   says and what the Slack write rule is.
+2. Confirm the repo is present and on the expected branch; show the last commit.
+3. Confirm the dev tooling is on PATH without installing anything: run `which mdformat pylint
+   pyink nbqa` and print their versions.
+4. Run the CI checks from .github/workflows/ci.yml against the repo and report the result.
+5. Network: try fetching huggingface.co, services.healthtech.dtu.dk and www.meetup.com. For each,
+   say whether it resolved. If one is blocked, name the host rather than guessing a cause.
+6. Slack: is the Slack MCP server connected? If yes, give me the session-start Slack digest for
+   Bits in Bio, and say "none" if there is nothing worth my attention. If it failed to connect,
+   say so and quote the error.
+7. Tell me which step of docs/TRACK.md is next, read from the file rather than assumed.
+
+Then stop and wait. Do not start Phase 1 work in this session.
+```
+
+Point 1 is the one that matters most — it checks that the teaching protocol is actually loading,
+which is what everything else in this repo depends on.
