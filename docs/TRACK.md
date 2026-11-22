@@ -15,9 +15,9 @@ Honest state, read off the repo rather than off memory:
 - **Project Gamma (peptide / HLA-B\*27:05 binding)** — preprocessing and training notebooks are
   committed and complete. Five fine-tuning setups of ESM-2 were run and compared (head-only, full
   FT, differential LR, LoRA, 35M model).
-- **Not done:** `explainability.ipynb` does not exist. Model weights exist nowhere durable — they
-  were written to `models/` inside a Colab runtime that is long gone. The dataset is not published.
-  There is no worklog.
+- **Not done:** `explainability.ipynb` does not exist. Model weights are stored locally on my
+  machine but not published anywhere durable or citable. The dataset is not published. There is no
+  worklog.
 - **Project Alpha (federated / DP GWAS)** and **Project Beta (knowledge graph)** — not started.
 
 ### The thing I missed last time
@@ -26,13 +26,22 @@ The reported numbers (up to 0.95 precision) are measured against **synthetic neg
 sampling amino acids from Swiss-Prot background frequencies**, on a **random train/test split**.
 Both of those inflate the score:
 
-1. A random decoy differs from a real epitope in *amino-acid composition*, not just in motif. The
-   model can score well by learning "does this look like a real peptide at all", which is not the
-   question anyone cares about.
-1. Peptide datasets contain near-duplicates. A random split puts close relatives of test peptides
-   into train, so the test set measures memorisation as much as generalisation. The epitope field
-   handles this with similarity-based partitioning (look up Hobohm 1 clustering, and how NetMHCpan
-   builds its partitions).
+1. **The decoys make the task too easy — which is not the same as making the labels wrong.** Random
+   peptides really are almost all non-binders, so the *labels* on my decoys are fine, and sampling
+   from Swiss-Prot frequencies means they are not obviously fake either. The problem is narrower:
+   binders are **not** proteome-average in composition (B\*27:05 binders are Arg-enriched), while my
+   decoys are. So a model could score well by counting amino acids without ever learning *where*
+   they sit. The question I care about is positional, and composition alone may be answering it.
+   Hence the decisive control: shuffled positives, which hold composition fixed and destroy only
+   order.
+1. **The split overstates performance for the use case I actually claim.** A random split over a
+   dataset full of near-duplicates measures performance on peptides *similar to the training set*.
+   That is a legitimate measurement — if that is the deployment distribution, nearest-neighbour
+   matching is a valid model and the number is honest. But the stated deliverable is scanning a
+   **novel protein** for epitopes, where by construction no close relative was in training. So the
+   number answers a question I am not asking. The field's fix is similarity-based partitioning (look
+   up Hobohm 1 clustering, and how NetMHCpan builds its partitions). Before applying it, state which
+   claim is being made — leakage is only leakage relative to a claim.
 
 So the current result is **not yet a result**. That is not a setback — it is the most interesting
 thing in the project, and Phase 1 is about turning it into a defensible finding.
@@ -57,9 +66,11 @@ that compound.
 1. **Retrieval, not re-reading.** Once a week, answer questions drawn from my own worklog with the
    worklog closed. Re-reading notes feels like learning and is not. (AI generating the quiz from my
    notes is a good use of AI.)
-1. **Smallest thing that can be wrong, first.** A position weight matrix before a transformer. A
-   baseline I fully understand is worth more than a model I do not, and it is the only way to know
-   whether the big model earned its complexity.
+1. **Build the simplest model I can fully inspect, before the one I cannot.** Concretely: a position
+   weight matrix before a transformer. A PWM has few enough parameters that I can read every one of
+   them and say exactly why it got a given peptide wrong; a transformer's failure is opaque. The
+   payoff is comparison — if the PWM scores 0.93 and the transformer 0.95, the transformer earned
+   almost nothing, and without the PWM I would never have known that.
 
 ### What is worth learning in 2026, and what is not
 
@@ -131,6 +142,12 @@ shiny demos, and it is the only version of this project that survives an intervi
    (`mhcflurry` is pip-installable and open source; NetMHCpan is the field standard but licensed).
    Knowing the gap to the state of the art is part of the result.
 1. Report **AUPRC and ROC-AUC**, not accuracy/precision/recall at an arbitrary 0.5 threshold.
+1. **Consider regression instead of classification.** Binding is a spectrum, and thresholding at 500
+   nM throws away the distinction between 300 nM and 480 nM while manufacturing a hard boundary
+   between 499 and 501. Predicting log-affinity directly keeps that information and makes the
+   threshold a decision made at the end, by whoever is using the output, rather than one baked into
+   the labels. Try it as a sixth setup and compare — note that the comparison itself needs thought,
+   since a regressor and a classifier are not scored the same way.
 
 **Gate:** I can state, in two sentences and without notes, what my model is good enough for and what
 it is not, and I can draw the HLA-B\*27:05 motif and explain why P2 is Arg in terms of the binding
