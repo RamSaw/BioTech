@@ -14,6 +14,7 @@ Pet BioTech projects, and the learning track behind them.
   here. This repository exists to produce understanding, not just working code.
 - [`docs/decisions/`](docs/decisions/) — settled decisions, e.g. where datasets and model weights
   live.
+- [`docs/reading-routine.md`](docs/reading-routine.md) — how the textbook background track is read.
 - [`docs/environment-setup.md`](docs/environment-setup.md) — cloud environment configuration.
 - [`development_guide.md`](development_guide.md) — coding, notebook and dependency conventions.
 

@@ -6,6 +6,8 @@ Read these before working in this repo:
   repo's purpose is learning, not shipping code. Read it before answering any conceptual question or
   starting a learning session; it defines what every session must contain and what must not be done
   for the user.
+- **[`docs/reading-routine.md`](docs/reading-routine.md)** — the textbook routine: he reads alone,
+  the book arbitrates over you, and you quiz from the sections he names.
 - **[`docs/TRACK.md`](docs/TRACK.md)** — current phase, next step, and the gates between phases.
   Check which step is active before proposing work.
 - **[`development_guide.md`](development_guide.md)** — coding, notebook, linting and dependency

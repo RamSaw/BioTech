@@ -3,9 +3,21 @@
 **Questions only. No answers in this file** — answers here would turn a retrieval tool into a
 reading tool, and re-reading is the thing being avoided.
 
-Used at the start of every session (3–5 questions, closed book) and in a larger weekly sweep.
-Questions are added at the end of each session. A question answered fluently three times in a row
-moves to `## Retired`.
+Used at the start of every session (3–5 questions) and in a larger weekly sweep. Questions are added
+at the end of each session. A question answered fluently three times in a row moves to `## Retired`.
+
+## How to answer
+
+**Write the answer down by hand before saying or reading anything.** Closed book, closed laptop, no
+asking first. Then compare.
+
+Writing first is not ceremony. A half-formed answer feels complete in your head and only falls apart
+once it has to become sentences, so an answer spoken aloud — or recognised as familiar when the real
+one appears — hides exactly the gap this exercise exists to find. Committing in writing is what
+makes the gap visible, and the gap is the whole point.
+
+If the answer will not come: write **what you would need to know** to work it out. That is a valid
+answer and it is the one that tells us what to look at next.
 
 ## Open — Phase 1
 
