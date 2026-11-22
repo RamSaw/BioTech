@@ -200,12 +200,16 @@ epsilon buy you".
 
 ### Running in parallel (not a phase)
 
-- **Fundamentals come from a textbook, not from papers.** A friend who made the same SWE →
-  bioinformatics move prepared by working through the first seven chapters of a textbook, and that
-  is the right shape: papers assume the fundamentals and spend their words on novelty, so they are a
-  bad teacher for the basics. Work through the book at a steady chapter rate, with closed-book
-  retrieval after each chapter — the retrieval is what separates this from passive reading, and it
-  is where a course or book usually leaks.
+- **Fundamentals come from a textbook, not from papers.** The book is Alberts et al., *Molecular
+  Biology of the Cell* (ISBN 978-0815344322), chapters 1–7 — the preparation a friend used for the
+  same SWE → bioinformatics move. That is the right shape: papers assume the fundamentals and spend
+  their words on novelty, so they are a bad teacher for the basics. Chapters 1–3 are Part I (cells
+  and genomes, cell chemistry, **proteins**) and 4–7 are Part II (basic genetic mechanisms), which
+  stops before the cell-biology material that matters least for sequence models. **Chapter 3,
+  Proteins, is the one this project leans on directly** — protein structure, side chains and binding
+  are the vocabulary of the whole HLA question. Work through it at a steady chapter rate with
+  closed-book retrieval after each chapter; the retrieval is what separates this from passive
+  reading, and it is where a course or book usually leaks.
 - **Figures and methods, not whole papers.** When a paper is needed, read the figures with their
   captions and the methods section; skip introduction and discussion, which is where the noise is
   concentrated. Fifteen minutes on one figure often beats an hour on the prose. Phase 1 needs
