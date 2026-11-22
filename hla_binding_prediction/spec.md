@@ -7,6 +7,13 @@
 All coding within this project **MUST** strictly adhere to the guidelines outlined in
 [`development_guide.md`](../development_guide.md).
 
+## Status
+
+The preprocessing and training notebooks are complete, but the reported metrics are not yet
+trustworthy: negatives are synthetic and the train/test split is random over a dataset containing
+near-duplicates. Reworking the evaluation comes before the explainability notebook. See
+[`../docs/TRACK.md`](../docs/TRACK.md) for the current phase and its steps.
+
 ## Project Structure
 
 The computational pipeline will be split across three distinct Jupyter Notebooks to enforce
