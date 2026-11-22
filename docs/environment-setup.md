@@ -30,9 +30,12 @@ host and it takes seconds to add.
 | `pmc.ncbi.nlm.nih.gov`       | full-text papers                                                                 |
 | `www.meetup.com`             | the January reminder reads the Health AI Munich schedule                         |
 | `amzn.eu`                    | book lookups                                                                     |
+| `mcp.slack.com`              | the Slack MCP server (added 2026-11-22; see "Slack" below)                       |
 
 Package managers and MCP server hosts are allowed without being listed. GitHub works through the
-session's git proxy and needs no entry.
+session's git proxy and needs no entry. **"MCP server hosts" does not cover MCP servers defined by a
+plugin's own `.mcp.json`** — the `slack-by-salesforce` plugin's server was refused by the proxy
+until `mcp.slack.com` was listed explicitly.
 
 ## Setup script
 
@@ -47,24 +50,55 @@ VENV="$HOME/.venvs/biotech"
 if [ -f BioTech/requirements-dev.lock ]; then
   "$VENV/bin/pip" install --no-input -q -r BioTech/requirements-dev.lock
 fi
-LINE="export PATH=\"$VENV/bin:\$PATH\""
-grep -qxF "$LINE" "$HOME/.bashrc" 2>/dev/null || echo "$LINE" >> "$HOME/.bashrc"
+for t in pyink mdformat nbqa pylint pylint-exit; do
+  if [ -x "$VENV/bin/$t" ]; then ln -sf "$VENV/bin/$t" "/usr/local/bin/$t"; fi
+done
 ```
 
 Why it is shaped this way — each point was established by trying it, not assumed:
 
+- **Symlinks into `/usr/local/bin`, not a PATH line in `~/.bashrc`.** The first version appended
+  `export PATH=...` to `.bashrc`, and the tools were then not found: Claude's shell is
+  non-interactive, and the stock Debian `.bashrc` returns at `[ -z "$PS1" ] && return` before
+  reaching the appended line. `/usr/local/bin` is on PATH for every shell. Verified with
+  `env -i PATH=/usr/local/bin:/usr/bin:/bin bash -c 'which pyink ...'`.
+
+- **The symlinks and the venv live in the container, not on the environment.** They are lost
+  whenever the container is reclaimed, and they exist only because this script recreates them on
+  every *fresh* container. Consequence: a change to this script does nothing for the container that
+  is already running. Either run the script by hand in that session (from the directory holding the
+  checkouts, i.e. the parent of `BioTech/`), or treat the change as unproven until a fresh session
+  starts on the environment.
+
 - Installs the dev lock so `pyink`, `mdformat`, `nbqa` and `pylint` are present and the CI checks
   run without installing anything first.
+
 - **Virtualenv rather than system-wide.** A plain `pip install -r requirements-dev.lock` *fails* on
   this base image — `Cannot uninstall pyparsing 3.1.1, RECORD file not found`, because the Debian
   package manager owns it. Both paths were tried.
+
 - Guards on `BioTech/` existing, so it cannot break a session with a different repository attached.
   A failing setup script stops the session from starting at all.
-- Idempotent: two consecutive runs are clean and the `.bashrc` line is added once.
 
-The script was verified by running it, but **it has not yet run as a real setup script** — that only
-happens on the first fresh session on this environment, which is what the validation prompt below is
-for.
+- Idempotent: two consecutive runs are clean (`ln -sf` overwrites its own links).
+
+History: the first version ran as a real setup script on 2026-11-22 (the venv was built) but failed
+check 3 of the validation prompt because of the `.bashrc` problem above. The symlink version was run
+by hand in that same session and passed, but **it has not yet run as a real setup script on a fresh
+container** — re-run the validation prompt in the next new session.
+
+## Slack
+
+Reading Bits in Bio needs two things, and the second is not an environment setting:
+
+1. **Network:** `mcp.slack.com` on the allowlist (done). OAuth token exchange also goes to
+   `slack.com`, which is not listed; add it only if a connection attempt is refused on it.
+1. **Authentication:** the `slack-by-salesforce` plugin authenticates with a browser redirect to
+   `localhost:3118` inside the container, which cannot be completed from a cloud session. Connect
+   Slack as a claude.ai connector instead (claude.ai → Customize → Connectors), then start a **new**
+   session — connectors are read only at session start.
+
+Until both are true, the session-start Slack digest reports the connection error rather than "none".
 
 ## Validation prompt
 
